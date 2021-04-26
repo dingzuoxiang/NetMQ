@@ -115,23 +115,23 @@ namespace netmqsample.client
             int equipNo = 1;
             var subSocket = new SubscriberSocket();
             subSocket.Connect(publishSocketAddress);
-            subSocket.Subscribe("ganweisoftapi/Debug/EquipAddEvent");
-            subSocket.Subscribe($"ganweisoftapi/Debug/EquipChangeEvent/{equipNo}");
-            subSocket.Subscribe($"ganweisoftapi/Debug/EquipDeleteEvent/{equipNo}");
-            subSocket.Subscribe($"ganweisoftapi/Debug/YcAddEvent/{equipNo}");
-            subSocket.Subscribe($"ganweisoftapi/Debug/YcChangeEvent/{equipNo}");
-            subSocket.Subscribe($"ganweisoftapi/Debug/YcDeleteEvent/{equipNo}");
-            subSocket.Subscribe($"ganweisoftapi/Debug/YxAddEvent/{equipNo}");
-            subSocket.Subscribe($"ganweisoftapi/Debug/YxChangeEvent/{equipNo}");
-            subSocket.Subscribe($"ganweisoftapi/Debug/YxDeleteEvent/{equipNo}");
-            subSocket.Subscribe($"ganweisoftapi/Debug/SetAddEvent/{equipNo}");
-            subSocket.Subscribe($"ganweisoftapi/Debug/SetChangeEvent/{equipNo}");
-            subSocket.Subscribe($"ganweisoftapi/Debug/SetDeleteEvent/{equipNo}");
-            subSocket.Subscribe($"ganweisoftapi/Debug/SendControl/{equipNo}");
-            subSocket.Subscribe($"ganweisoftapi/Debug/SendVoice/{equipNo}");
-            subSocket.Subscribe($"ganweisoftapi/Debug/RealTimeSnapshot/{equipNo}");
+            //subSocket.Subscribe("ganweisoftapi/Debug/EquipAddEvent");
+            //subSocket.Subscribe($"ganweisoftapi/Debug/EquipChangeEvent/{equipNo}");
+            //subSocket.Subscribe($"ganweisoftapi/Debug/EquipDeleteEvent/{equipNo}");
+            //subSocket.Subscribe($"ganweisoftapi/Debug/YcAddEvent/{equipNo}");
+            //subSocket.Subscribe($"ganweisoftapi/Debug/YcChangeEvent/{equipNo}");
+            //subSocket.Subscribe($"ganweisoftapi/Debug/YcDeleteEvent/{equipNo}");
+            //subSocket.Subscribe($"ganweisoftapi/Debug/YxAddEvent/{equipNo}");
+            //subSocket.Subscribe($"ganweisoftapi/Debug/YxChangeEvent/{equipNo}");
+            //subSocket.Subscribe($"ganweisoftapi/Debug/YxDeleteEvent/{equipNo}");
+            //subSocket.Subscribe($"ganweisoftapi/Debug/SetAddEvent/{equipNo}");
+            //subSocket.Subscribe($"ganweisoftapi/Debug/SetChangeEvent/{equipNo}");
+            //subSocket.Subscribe($"ganweisoftapi/Debug/SetDeleteEvent/{equipNo}");
+            //subSocket.Subscribe($"ganweisoftapi/Debug/SendControl/{equipNo}");
+            //subSocket.Subscribe($"ganweisoftapi/Debug/SendVoice/{equipNo}");
+            subSocket.Subscribe($"ganweisoftapi/Debug/AddRealTimeSnapshot/11151");
 
-            subSocket.SubscribeToAnyTopic();
+            //subSocket.SubscribeToAnyTopic();
             int i = 1;
             while (true)
             {

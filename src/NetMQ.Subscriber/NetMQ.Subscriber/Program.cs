@@ -13,52 +13,82 @@ namespace NetMQ.Subscriber
     {
         static readonly string _subscriberAddress = "tcp://localhost:5588";
         private const string _topic = "ganweisoftapi/Debug";
+        static SubscriberSocket subscriberSocket;
         static void Main(string[] args)
         {
+            Console.WriteLine("Subscriber socket connecting...\n");
+            subscriberSocket = new SubscriberSocket();
+            subscriberSocket.Connect(_subscriberAddress);
             var task = new TaskFactory().StartNew(() =>
             {
-                XSubscriberSocket();
+                AddSubscribeAnyTopic();
+                //AddSubscribe(TopicType.YcChangeEvent,11167);
+                //XSubscriberSocket();
             }, TaskCreationOptions.LongRunning);
+            ReceiveFrameString();
             while (Console.ReadKey().Key != ConsoleKey.Escape)
             {
 
             }
         }
 
-        private static void XSubscriberSocket()
+        public static void AddSubscribeAnyTopic()
         {
-            using var subSocket = new SubscriberSocket();
-            subSocket.Connect(_subscriberAddress);
-            //subSocket.Subscribe($"{_topic}/{TopicType.EquipAddEvent}");
-            //subSocket.Subscribe($"{_topic}/{TopicType.EquipChangeEvent}/{11151}");
-            //subSocket.Subscribe($"{_topic}/{TopicType.EquipDeleteEvent}/{11151}");
-            //subSocket.Subscribe($"{_topic}/{TopicType.YcAddEvent}/{equipNo}");
-            subSocket.Subscribe($"{_topic}/{TopicType.YcChangeEvent}/{11151}");
-            //subSocket.Subscribe($"{_topic}/{TopicType.YcDeleteEvent}/{equipNo}");
-            //subSocket.Subscribe($"{_topic}/{TopicType.YxAddEvent}/{equipNo}");
-            //subSocket.Subscribe($"{_topic}/{TopicType.YxChangeEvent}/{11151}");
-            //subSocket.Subscribe($"{_topic}/{TopicType.YxDeleteEvent}/{equipNo}");
-            //subSocket.Subscribe($"{_topic}/{TopicType.SetAddEvent}/{equipNo}");
-            //subSocket.Subscribe($"{_topic}/{TopicType.SetChangeEvent}/{equipNo}");
-            //subSocket.Subscribe($"{_topic}/{TopicType.SetDeleteEvent}/{equipNo}");
-            //subSocket.Subscribe($"{_topic}/{TopicType.SendControl}/{11151}");
-            //subSocket.Subscribe($"{_topic}/{TopicType.SendVoice}");
-            //subSocket.Subscribe($"{_topic}/{TopicType.AddRealTimeSnapshot}/{11151}");
-            //subSocket.Subscribe($"{_topic}/{TopicType.EquipAlarmEvent}/{11151}");
-            //subSocket.Subscribe($"{_topic}/{TopicType.DeleteRealTimeSnapshot}/{11151}");
-            //subSocket.SubscribeToAnyTopic();
-            Console.WriteLine("Subscriber socket connecting...\n");
+            subscriberSocket.SubscribeToAnyTopic();
+        }
+
+        public static void AddSubscribe(TopicType topicType)
+        {
+            subscriberSocket.Subscribe($"{_topic}/{topicType}");
+        }
+
+        public static void AddSubscribe(TopicType topicType, int equipNo)
+        {
+            subscriberSocket.Subscribe($"{_topic}/{topicType}/{equipNo}");
+        }
+
+        private static void ReceiveFrameString()
+        {
             while (true)
             {
-                string messageTopicReceived = subSocket.ReceiveFrameString();
-                string messageReceived = subSocket.ReceiveFrameString();
-                Console.WriteLine(messageReceived + "\n");
+                string messageTopicReceived = subscriberSocket.ReceiveFrameString();
+                string messageReceived = subscriberSocket.ReceiveFrameString();
+                Console.WriteLine($"{messageReceived}\n");
                 //var messages = JsonConvert.DeserializeObject<List<MessageInfo>>(messageReceived);
-                //foreach(var message in messages)
+                //foreach (var message in messages)
                 //{
                 //    DistributeMessage(message);
                 //}
             }
+        }
+
+        private static void XSubscriberSocket()
+        {
+            using var subSocket = new SubscriberSocket();
+            string loginMark = "";
+            string userName = "";
+            subSocket.Connect(_subscriberAddress);
+            subSocket.Subscribe($"{_topic}/{TopicType.EquipAddEvent}");
+            subSocket.Subscribe($"{_topic}/{TopicType.EquipChangeEvent}");
+            subSocket.Subscribe($"{_topic}/{TopicType.EquipDeleteEvent}");
+            subSocket.Subscribe($"{_topic}/{TopicType.YcChangeEvent}/{11151}");
+            subSocket.Subscribe($"{_topic}/{TopicType.YxChangeEvent}/{11151}");
+            subSocket.Subscribe($"{_topic}/{TopicType.SendControl}/{11151}");
+            subSocket.Subscribe($"{_topic}/{TopicType.AddRealTimeSnapshot}");
+            subSocket.Subscribe($"{_topic}/{TopicType.EquipStateEvent}");
+            subSocket.Subscribe($"{_topic}/{TopicType.DeleteRealTimeSnapshot}");
+            subSocket.Subscribe($"{_topic}/{TopicType.OpenPage4InterScreen}");
+            subSocket.Subscribe($"{_topic}/{TopicType.ShowOrClosePage}");
+            subSocket.Subscribe($"{_topic}/{TopicType.KickClient}/{loginMark}");
+            subSocket.Subscribe($"{_topic}/{TopicType.ShowMsg}");
+            subSocket.Subscribe($"{_topic}/{TopicType.NotifyOffLine}");
+            subSocket.Subscribe($"{_topic}/{TopicType.NotifyRoleOffLine}");
+            subSocket.Subscribe($"{_topic}/{TopicType.ShowLockSetParmMsg}");
+            subSocket.Subscribe($"{_topic}/{TopicType.VOpenPage}/{userName}");
+            subSocket.Subscribe($"{_topic}/{TopicType.ShowInfo}");
+            subSocket.SubscribeToAnyTopic();
+            Console.WriteLine("Subscriber socket connecting...\n");
+            ReceiveFrameString();
         }
 
         static void DistributeMessage(MessageInfo message)
@@ -148,8 +178,8 @@ namespace NetMQ.Subscriber
                     builder.Append($"topic：{message.Topic}\n");
                     builder.Append($"message：{message.Message}\n");
                     break;
-                case TopicType.EquipAlarmEvent:
-                    builder.Append("设备报警事件\n");
+                case TopicType.EquipStateEvent:
+                    builder.Append("设备状态事件\n");
                     builder.Append($"topic：{message.Topic}\n");
                     builder.Append($"message：{message.Message}\n");
                     break;

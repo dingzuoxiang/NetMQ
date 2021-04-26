@@ -12,7 +12,7 @@ namespace NetMQ.Subscriber.Model
         [JsonProperty("message")]
         public string Message { get; set; }
     }
-
+    ,
     public class Message
     {
         [JsonProperty("subscribeTopic")]
